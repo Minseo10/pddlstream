@@ -197,6 +197,20 @@ def post_process(problem, plan, teleport=False):
             open_gripper = GripperCommand(problem.robot, a, position, teleport=teleport)
             detach = Detach(problem.robot, a, b)
             new_commands = [t, detach, open_gripper, t.reverse()]
+        elif name == 'unstack':
+            a, b, undero, p, g, _, c = args
+            [t] = c.commands
+            close_gripper = GripperCommand(problem.robot, a, g.grasp_width, teleport=teleport)
+            attach = Attach(problem.robot, a, g, b)
+            new_commands = [t, close_gripper, attach, t.reverse()]
+        elif name == 'stack':
+            a, b, undero, p, g, _, c = args
+            [t] = c.commands
+            gripper_joint = get_gripper_joints(problem.robot, a)[0]
+            position = get_max_limit(problem.robot, gripper_joint)
+            open_gripper = GripperCommand(problem.robot, a, position, teleport=teleport)
+            detach = Detach(problem.robot, a, b)
+            new_commands = [t, detach, open_gripper, t.reverse()]
         elif name == 'clean': # TODO: add text or change color?
             body, sink = args
             new_commands = [Clean(body)]

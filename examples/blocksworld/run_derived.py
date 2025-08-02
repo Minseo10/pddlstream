@@ -8,7 +8,7 @@ from pddlstream.algorithms.incremental import solve_incremental
 from pddlstream.language.constants import print_solution, PDDLProblem
 
 DOMAIN_PDDL = """
-(define (domain blocksworld)
+(define (domain blocksworld_pr2)
   (:requirements :strips :equality)
   (:predicates (on-table ?x)
                (arm-empty)
@@ -43,7 +43,7 @@ DOMAIN_PDDL = """
 
 PROBLEM_PDDL = """
 (define (problem pb2)
-   (:domain blocksworld)
+   (:domain blocksworld_pr2)
    (:objects a b)
    (:init 
      (on b a)

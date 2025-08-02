@@ -219,13 +219,21 @@ def compile_to_exogenous_axioms(evaluations, domain, streams):
 ##################################################
 
 def compile_to_exogenous(evaluations, domain, streams):
-    exogenous_predicates = get_exogenous_predicates(domain, streams)
+    # exogenous_predicates = get_exogenous_predicates(domain, streams)
+
+    # only keep real Stream instances (skip Function objects)
+    from pddlstream.language.stream import Stream
+    stream_objs = [s for s in streams if isinstance(s, Stream)]
+    exogenous_predicates = get_exogenous_predicates(domain, stream_objs)
+
     if not exogenous_predicates:
         return False
     print('Warning! The following predicates are mentioned in both action effects '
           'and stream domain conditions: {}'.format(exogenous_predicates))
     if EXOGENOUS_AXIOMS:
-        compile_to_exogenous_axioms(evaluations, domain, streams)
+        # compile_to_exogenous_axioms(evaluations, domain, streams)
+        compile_to_exogenous_axioms(evaluations, domain, stream_objs)
     else:
-        compile_to_exogenous_actions(evaluations, domain, streams)
+        # compile_to_exogenous_actions(evaluations, domain, streams)
+        compile_to_exogenous_axioms(evaluations, domain, stream_objs)
     return True
