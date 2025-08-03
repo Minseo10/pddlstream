@@ -94,6 +94,7 @@
                        (not (UnsafeApproach ?o ?p ?g))
                        (not (UnsafeATraj ?t))
                        ; added
+                       (Holding ?a ?o)
                   )
     :effect (and (AtPose ?o ?p) (HandEmpty ?a) (CanMove)
                  (not (AtGrasp ?a ?o ?g))
@@ -130,6 +131,7 @@
                        (not (UnsafeATraj ?t))
                        ; added
                        (clear ?undero)
+                       (Holding ?a ?o)
                   )
     :effect (and (AtPose ?o ?p) (HandEmpty ?a) (CanMove)
                  (not (AtGrasp ?a ?o ?g))

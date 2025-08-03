@@ -5,7 +5,7 @@ from __future__ import print_function
 from examples.pybullet.blocksworld_pr2.streams import get_cfree_approach_pose_test, get_cfree_pose_pose_test, get_cfree_traj_pose_test, \
     get_cfree_traj_grasp_pose_test, BASE_CONSTANT, distance_fn, move_cost_fn
 
-from examples.pybullet.utils.pybullet_tools.pr2_primitives import Pose, Conf, get_ik_ir_gen, get_motion_gen, get_ik_fn_only_arm, \
+from examples.pybullet.utils.pybullet_tools.pr2_primitives import Pose, Conf, get_ik_ir_gen, get_motion_gen, get_ik_ir_gen_only_arm, \
     get_stable_gen, get_grasp_gen, control_commands
 from examples.pybullet.utils.pybullet_tools.pr2_utils import get_arm_joints, ARM_NAMES, get_group_joints, \
     get_group_conf
@@ -75,14 +75,14 @@ def pddlstream_from_problem(problem, init_surfaces, base_limits=None, collisions
     # init += [('Pose', table_id, table_pose)]
     # init += [('AtPose', table_id, table_pose)]
 
-    # init += [('Stackable', b1, b2) for b1 in problem.movable for b2 in problem.movable if b1 != b2]
+    init += [('Stackable', b1, b2) for b1 in problem.movable for b2 in problem.movable if b1 != b2]
 
     for body in problem.movable:
         pose = Pose(body, get_pose(body), init=True) # TODO: supported here
         init += [('Pose', body, pose), ('Graspable', body),
                  ('AtPose', body, pose), ('Stackable', body, None)]
 
-        # init += [('Stackable', body, table_id)]
+        init += [('Stackable', body, table_id)] # block floating
 
         for surface in problem.surfaces:
             if is_placement(body, surface):
@@ -143,8 +143,10 @@ def pddlstream_from_problem(problem, init_surfaces, base_limits=None, collisions
         'sample-pose': from_gen_fn(get_stable_gen(problem, collisions=collisions)),
         'sample-grasp': from_list_fn(get_grasp_gen(problem, collisions=collisions)),
         #'sample-grasp': from_gen_fn(get_grasp_gen(problem, collisions=collisions)),
-        'inverse-kinematics': from_fn(get_ik_fn_only_arm(problem, custom_limits=custom_limits,
-                                                        collisions=collisions, teleport=teleport)),
+        'inverse-kinematics': from_gen_fn(get_ik_ir_gen_only_arm(problem, custom_limits=custom_limits,
+                                                                collisions=collisions, teleport=teleport)),
+        # 'inverse-kinematics': from_gen_fn(get_ik_ir_gen(problem, custom_limits=custom_limits,
+        #                                                 collisions=collisions, teleport=teleport)),
         'plan-base-motion': from_fn(get_motion_gen(problem, custom_limits=custom_limits,
                                                    collisions=collisions, teleport=teleport)),
 
