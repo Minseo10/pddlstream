@@ -34,10 +34,23 @@ def create_parser(default_algorithm=DEFAULT_ALGORITHM):
                         help='Specifies the PDDLStream algorithm to use')
     parser.add_argument('-u', '--unit', action='store_true', help='Uses unit costs') # --unit_costs
     parser.add_argument(
-        '-problem_path',
-        type=str,
-        help='Path to problem PDDL file'
+        '-prob_num',
+        type=int,
+        help='number of objects'
     )
+    parser.add_argument(
+        '-prob_idx',
+        type=int,
+        help='index of the problem'
+    )
+    parser.add_argument(
+        '-trial',
+        type=int,
+        help='number of random trials'
+    )
+    parser.add_argument('--export_json', type=str, default='plan_export.json',
+                        help='Where to save exported plan+commands as JSON')
+
     # args = parser.parse_args()
     # print('Arguments:', args)
     # TODO: search planner, debug

@@ -84,7 +84,7 @@ def pddlstream_from_problem(problem, init_surfaces, base_limits=None, collisions
     for body in problem.movable:
         pose = Pose(body, get_pose(body), init=True) # TODO: supported here
         init += [('Pose', body, pose), ('Graspable', body),
-                 ('AtPose', body, pose), ('Stackable', body, None)]
+                 ('AtPose', body, pose), ('Stackable', body, None), ('block', body)]
 
         init += [('Stackable', body, table_id)] # block floating
 
@@ -100,8 +100,14 @@ def pddlstream_from_problem(problem, init_surfaces, base_limits=None, collisions
     for body_id, surf_id in init_surfaces.items():
         if surf_id == table_id:
             init.append(('on-table', body_id))
+            init.append(('table', surf_id))
+            pose = Pose(body_id, get_pose(body_id))
+            init.append(('table-support', body_id, pose, surf_id))
         else:
             init.append(('stacked-on', body_id, surf_id))
+            pose = Pose(body_id, get_pose(body_id))
+            underpose = Pose(body_id, get_pose(surf_id))
+            init.append(('block-support', body_id, pose, surf_id, underpose))
 
     # clear
     occupied = set(init_surfaces.values()) - {table_id}
@@ -144,8 +150,8 @@ def pddlstream_from_problem(problem, init_surfaces, base_limits=None, collisions
         custom_limits.update(get_custom_limits(robot, problem.base_limits))
 
     stream_map = {
-        # 'sample-table-pose': from_gen_fn(get_table_gen(problem, collisions=collisions)),
-        'sample-pose': from_gen_fn(get_stable_gen(problem, collisions=collisions)),
+        'sample-table-pose': from_gen_fn(get_table_gen(problem, collisions=collisions)),
+        'sample-block-pose': from_gen_fn(get_stable_gen(problem, collisions=collisions)),
         'sample-grasp': from_list_fn(get_grasp_gen(problem, collisions=collisions)),
         #'sample-grasp': from_gen_fn(get_grasp_gen(problem, collisions=collisions)),
         'inverse-kinematics': from_gen_fn(get_ik_ir_gen_only_arm(problem, custom_limits=custom_limits,
