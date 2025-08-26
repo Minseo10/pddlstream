@@ -302,11 +302,11 @@ def packed(meta_json, prob_num, prob_idx, trial, arm='left', grasp_type='top', u
         return None
 
     if used_json_poses:
-        print("using poses from json")
+        # print("using poses from json")
         with open(meta_json, "r", encoding="utf-8") as f:
             meta = json.load(f)
         entry = _find_entry(meta, prob_num, prob_idx, trial)
-        print("entry: ", entry)
+        # print("entry: ", entry)
 
         if entry and "objects" in entry:
             missing = []
@@ -482,11 +482,11 @@ if __name__ == "__main__":
     import json
 
     # 결과가 저장될 JSON 경로
-    out_json = "/home/minseo/robot_ws/src/tamp_llm/experiments/blocksworld_pr/problem/problems_meta.json"
+    out_json = "/home/minseo/robot_ws/src/tamp_llm/experiments/blocksworld_pr/problem/problems_meta_new.json"
 
     entries = []
-    for num in [5]:
-        for i in [7]:
+    for num in [4]:
+        for i in [4]:
             for j in [1, 2]:
                 pddl_path = f"/home/minseo/robot_ws/src/tamp_llm/experiments/blocksworld_pr/problem/blocksworld_pr{num}_{i}.pddl"
 
@@ -548,7 +548,7 @@ if __name__ == "__main__":
                 disconnect()
 
     os.makedirs(os.path.dirname(out_json), exist_ok=True)
-    with open(out_json, "a", encoding="utf-8") as f:
+    with open(out_json, "w", encoding="utf-8") as f:
         json.dump(entries, f, ensure_ascii=False, indent=2)
 
     print(f"Saved {len(entries)} entries to {out_json}")

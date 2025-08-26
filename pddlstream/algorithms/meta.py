@@ -50,6 +50,7 @@ def create_parser(default_algorithm=DEFAULT_ALGORITHM):
     )
     parser.add_argument('--export_json', type=str, default='plan_export.json',
                         help='Where to save exported plan+commands as JSON')
+    parser.add_argument('--json_path',type=str,help='Where to bring problem')
 
     # args = parser.parse_args()
     # print('Arguments:', args)

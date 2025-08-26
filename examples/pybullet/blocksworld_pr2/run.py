@@ -79,7 +79,7 @@ def pddlstream_from_problem(problem, init_surfaces, base_limits=None, collisions
     # init += [('Pose', table_id, table_pose)]
     # init += [('AtPose', table_id, table_pose)]
 
-    init += [('Stackable', b1, b2) for b1 in problem.movable for b2 in problem.movable if b1 != b2]
+    # init += [('Stackable', b1, b2) for b1 in problem.movable for b2 in problem.movable if b1 != b2]
 
     for body in problem.movable:
         pose = Pose(body, get_pose(body), init=True) # TODO: supported here
@@ -373,7 +373,7 @@ def main(verbose=True):
 
     success_cost = 0 if args.optimal else INF
     planner = 'ff-astar' if args.optimal else 'ff-wastar3'
-    search_sample_ratio = 2
+    search_sample_ratio = 1 # low ratio(0.5): more serach, high ration(2): more sampling
     max_planner_time = 10
     # effort_weight = 0 if args.optimal else 1
     effort_weight = 1e-3 if args.optimal else 1

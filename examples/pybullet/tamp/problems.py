@@ -61,7 +61,7 @@ def packed(arm='left', grasp_type='top', num=5):
     table = create_table()
     plate = create_box(plate_width, plate_width, plate_height, color=GREEN)
     plate_z = stable_z(plate, table)
-    set_point(plate, Point(z=plate_z))
+    set_point(plate, Point(x=0.55, y=0.00,z=plate_z))
     surfaces = [table, plate]
 
     blocks = [create_box(block_width, block_width, block_height, color=BLUE) for _ in range(num)]
